@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
 // localhost3000/anything
 router.get('/:id', (req, res) => {
-    console.log('hit a dynamic route!');
+    console.log('at the user route!');
     console.log(req.params.id);
 
     let query = `SELECT * FROM tbl_bio WHERE profID="${req.params.id}"`;
@@ -33,8 +33,18 @@ router.get('/:id', (req, res) => {
 
          console.log(result); // should see objects wrapped in an array
 
-        // render the home view with dynamic data
-        // res.render('home', { team: result });
+         // turn our social media property into an array - its just text in the DB,
+         // which isn't really anything we can work with
+         result[0].social = result[0].social.split(",").map(function(item) {
+             item =item.trim(); // remove the extra spaces from each word
+
+             return item;
+         });
+
+         // console.log('after split: ', result[0]);
+
+        // send the DB query back to the browser
+         res.json(result);
 
     
     })
